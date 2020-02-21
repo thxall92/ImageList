@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     inner class MyAsyncTask : AsyncTask<String, String, String>(){
-        var newsList: ArrayList<Item> = arrayListOf()
+        private var newsList: ArrayList<Item> = arrayListOf()
 
         override fun onPreExecute() {
             super.onPreExecute()
@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         override fun doInBackground(vararg params: String?) : String {
-            val doc = Jsoup.connect("$webUrl").get()
+            val doc = Jsoup.connect(webUrl).get()
             val elts = doc.select("div.search-content__gallery-assets gi-asset")
 
             elts.forEachIndexed{ _ , elem ->
@@ -44,9 +44,10 @@ class MainActivity : AppCompatActivity() {
         override fun onPostExecute(result: String?) {
             progressBar.visibility = View.GONE
 
+            tv_title.text = result
+
             val adapter = MyAdapter(newsList, this@MainActivity)
             rv_news_list.adapter = adapter
-
         }
 
     }
